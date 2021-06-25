@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Receipt</title>
+  <style>
+
+    main {
+      margin: 50px;
+      background: white;
+      border: none;
+    }
+
+    #invoice-POS {
+      margin-top: 0;
+      margin: 0 auto;
+      width: 10cm;
+      background: transparent;
+      font-family: 'monospace', monospace;
+    }
+
+    .titlebar {
+      font-family: Tahoma;
+      font-weight: 100;
+      font-size: 14px !important;
+      height: 40px !important;
+      letter-spacing: 2px;
+    }
+
+    .menubar {
+      color: white !important;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div id="invoice-POS">
+      <center id="top">
+        <p><a style="color: black;" href="#">Purchase Estimate</a></p>
+      </center>
+
+      <p style="
+          font-weight: 600;
+          font-size: 14px;
+         line-height: 0.95;
+        ">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        Receipt id: <span id='receipt-id'></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Date: <span id='date'></span>
+        <br>
+      </p>
+      <hr />
+
+      <div id="bot">
+        <div id="table">
+          <table style="width: 10cm; font-weight: 600; font-size: 15px; line-height: 1.2;">
+            <thead>
+              <tr>
+                <th style="width: 10%; text-align: center;">&nbsp;&nbsp;<u>Sl</u></th>
+                <th style="width: 35%; text-align: left"><u>Item</u></th>
+                <th style="width: 5%; text-align: center"><u>Qty</u></th>
+                <th style="width: 10%; text-align: center"><u>Rate</u></th>
+                <th style="width: 20%; text-align: left"><u>Amount</u></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <hr />
+          <p id='sub' style="font-weight: 700; text-align: right; font-size: 14px; line-height: 0.9;">
+
+          </p>
+
+          <p style="font-weight: 900; font-size: 16px; text-align: right; line-height: 0.2;">
+            Net Amt: Rs. <span id="net"></span>&nbsp;&nbsp;&nbsp;
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
+
+<script>
+  const electron = require("electron")
+  const { ipcRenderer } = electron
+  const customTitlebar = require('custom-electron-titlebar')
+
+  document.addEventListener('DOMContentLoaded', () => {
+    new customTitlebar.Titlebar({
+      backgroundColor: customTitlebar.Color.fromHex('#0C1427')
+    })
+    ipcRenderer.send('receipt:load', '')
+  })
+
+  const element = ele => {
+    return document.querySelector(ele)
+  }
+
+  const listing = items => {
+    tbody = element('tbody')
+    let index = 1
+
+    for (let i of items) {
+      const tr = document.createElement('tr')
+      const td1 = document.createElement('td')
+      const td2 = document.createElement('td')
+      const td3 = document.createElement('td')
+      const td4 = document.createElement('td')
+      const td5 = document.createElement('td')
+
+      td1.innerHTML = `&nbsp;&nbsp;&nbsp;${index++}`
+      td2.innerText = i.name
+      td3.innerHTML = `&nbsp;${i.quantity}`
+      td4.innerHTML = `&nbsp;${Number(parseFloat(i.rate).toFixed(2))}`
+      td5.innerText = Number(parseFloat(i.rate) * parseInt(i.quantity)).toFixed(2)
+
+      tr.appendChild(td1)
+      tr.appendChild(td2)
+      tr.appendChild(td3)
+      tr.appendChild(td4)
+      tr.appendChild(td5)
+      tbody.appendChild(tr)
+    }
+  }
+
+  ipcRenderer.on('receipt:show', (e, data) => {
+    element('.window-title').innerText = 'Receipt-' + data.pop()
+    data = data[0]
+    const id = data._id
+    const date = data.date
+    const items = data.items
+    const disc = data.discount
+    const net = data.totalAmt
+    const sub = data.subTotal
+    element('#receipt-id').innerText = id
+    element('#net').innerText = net
+    element('#date').innerText = date
+
+    if (disc > 0) {
+      element('#sub').innerHTML += `SubTotal: Rs.
+          ${sub}&nbsp;&nbsp;&nbsp;&nbsp;<br>
+          <strong>Discount: Rs.
+            ${disc}</strong>&nbsp;&nbsp;&nbsp;&nbsp;<br />
+          ------------ &nbsp;&nbsp;&nbsp;<br />`
+    }
+
+    listing(items)
+  })
+
+  addEventListener('keyup', e => {
+    if(e.key === 'p') print()
+  })
+</script>

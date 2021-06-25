@@ -1,0 +1,4 @@
+{"name":"c","phoneNo":"3","_id":"AmO76iC5OivIkB14"}
+{"name":"a","phoneNo":"1","_id":"BOGKgoDTTrJDBNfR"}
+{"name":"b","phoneNo":"2","_id":"cUVmyvukXp20GZ6z"}
+{"$$indexCreated":{"fieldName":"name","unique":true,"sparse":false}}

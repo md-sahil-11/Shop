@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <style>
+        th,
+        td {
+            width: 20% !important;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <form>
+            <div style="display: flex; align-items: center;">
+                <span><label>Item Name</label><br>
+                    <input class="in" id="name" type="text"></span>
+                <span><label>Item Brand</label><br>
+                    <input class="in" id="brand" type="text"></span>
+                <span><label>Quantity</label><br>
+                    <input class="in" value='1' min='1' id="quantity" type="number"></span>
+                <span><label>Item Price</label><br>
+                    <input class="in" id="price" type="text" onkeypress="return isNumberKey(event)"></span>
+                <span><br>&nbsp;
+                    <input class='submit' type="submit" value="+ Add">
+                </span>
+            </div>
+        </form>
+        <table id="show">
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>brand</th>
+                    <th>quantity</th>
+                    <th>rate</th>
+                    <th>---</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </main>
+</body>
+
+</html>
+<script>
+    const electron = require('electron')
+    const { ipcRenderer } = electron
+
+    const form = document.querySelector('form')
+    const name = document.getElementById('name')
+    const brand = document.getElementById('brand')
+    const quantity = document.getElementById('quantity')
+    const price = document.getElementById('price')
+    const show = document.querySelector('#show tbody')
+    const customTitlebar = require('custom-electron-titlebar')
+
+    document.addEventListener('DOMContentLoaded', () => {
+        new customTitlebar.Titlebar({
+            backgroundColor: customTitlebar.Color.fromHex('#0c1427')
+        })
+        ipcRenderer.send('inventoryItems:load', '')
+    }, false);
+
+    const deleteItem = e => {
+        ipcRenderer.send('inventoryItems:delete', e.target.getAttribute('index'))
+        ipcRenderer.send('inventoryItems:load', '')
+    }
+
+    ipcRenderer.on('inventoryItems:show', (e, data) => {
+        show.innerHTML = ''
+
+        for (let i of data) {
+            const tr = document.createElement('tr')
+            const td1 = document.createElement('td')
+            const td2 = document.createElement('td')
+            const td3 = document.createElement('td')
+            const td4 = document.createElement('td')
+            const td5 = document.createElement('td')
+
+            td1.innerText = i.name
+            td2.innerText = i.brand
+            td3.innerText = i.quantity
+            td4.innerText = '₹' +i.price
+            td5.innerText = 'delete'
+            td5.setAttribute('index', i._id)
+            td5.addEventListener('click', deleteItem)
+            td5.className = 'receipt'
+            td5.style.color = 'Red'
+
+            tr.appendChild(td1)
+            tr.appendChild(td2)
+            tr.appendChild(td3)
+            tr.appendChild(td4)
+            tr.appendChild(td5)
+            show.appendChild(tr)
+        }
+    })
+
+    const valOrDefault = (val, def) => {
+
+        if (val === '') return def
+        return val
+    }
+
+    form.addEventListener('submit', e => {
+        // e.preventDefault()
+        const itemName = name.value
+        const itemBrand = valOrDefault(brand.value, '---')
+        const itemQuantity = quantity.value
+        const itemPrice = price.value
+
+        if (itemName === '' || itemPrice === '') return
+        ipcRenderer.send('inventoryItems:add', {
+            'itemName': itemName,
+            'itemBrand': itemBrand,
+            'itemPrice': itemPrice,
+            'itemQuantity': itemQuantity
+        })
+    }, false)
+
+    function isNumberKey(evt) {
+
+        if (evt.key === '.' && !evt.target.value.includes('.')) return true
+
+        const charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>

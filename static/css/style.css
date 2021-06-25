@@ -1,0 +1,230 @@
+* {
+    font-family: Tahoma;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: rgba(255, 255, 255, .8);
+    letter-spacing: 2px;
+}
+
+:root {
+    --bodyBg: #070D19;
+    --mainBg: #0C1427;
+    --borderCol: #172340;
+    --inCol: #262F43;
+    --readCol: #18284E;
+    --focusCol: #507CF5;
+}
+
+body {
+    background-color: var(--bodyBg);
+}
+
+input, span, p {
+    font-size: 14px;
+}
+
+button, input {
+    border: none;
+}
+
+li, a {
+    cursor: pointer;
+}
+
+button:focus, input:focus {
+    outline: none;
+}
+
+.titlebar {
+    font-weight: 100;
+    height: 40px !important;
+    font-size: 14px !important;
+}
+
+.window-title {
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+}
+
+main {
+    background-color: var(--mainBg);
+    min-height: 100vh;
+
+    margin: 40px;
+    padding: 40px;
+    border: 1px solid var(--borderCol);
+    border-radius: 4px;
+}
+
+main h4 {
+    padding: 4px 0px;
+    width: fit-content;
+    font-weight: 500;
+    border-bottom: 2px solid var(--focusCol);
+}
+
+form label, th {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+form #customer-info, form #supplier-info {
+    margin: 20px 0px;
+    display: flex;
+}
+
+.items-content {
+    width: fit-content;
+}
+
+.remove {
+    background-color: rgb(255, 32, 32);
+    height: 44px;
+    width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 4px;
+    margin: 0px 8px;
+    font-size: 20px;
+    transition: 120ms ease;
+    cursor: pointer;
+}
+
+#add-container {
+    position: relative;
+}
+
+#add-container #add {
+    background-color: var(--focusCol);
+    padding: 12px;
+    border-radius: 4px;
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    cursor: pointer;
+    transition: 120ms ease;
+}
+
+form .submit {
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 4px;
+    background: #10B76E;
+    color: white;
+    transition: 120ms ease;
+}
+
+.remove:hover, form .submit:hover, #add-container #add:hover {
+    transform: scale(.9);
+    -webkit-transform: scale(.9);
+}
+
+form .in {
+    padding: 12px;
+    margin: 16px 2px;
+    border-radius: 4px;
+    background-color: var(--mainBg);
+    border: 1.6px solid var(--inCol);
+    height: 44px;
+    min-width: 170px !important;
+}
+
+form .in:focus {
+    border: 1.6px solid var(--focusCol);
+    background: var(--bodyBg);
+}
+
+form .read {
+    padding: 12px;
+    margin: 16px 2px;
+    border-radius: 4px;
+    border: none;
+    height: 44px;
+    min-width: 170px;
+    background-color: var(--readCol);
+}
+
+#myMenu, #customerList, #supplierList {
+    display: none;
+}
+
+.menu {
+    width: 270px;
+    max-height: 450px;
+    overflow-y: scroll;
+    position: absolute;
+    background-color: var(--bodyBg) !important;
+    color: white !important;
+}
+
+.menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.menu::-webkit-scrollbar-track {
+    background-color: var(--bodyBg);
+}
+
+.menu::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.li {
+    padding: 12px 20px; 
+    list-style: none; 
+    border-bottom: 1.4px solid var(--mainBg);
+}
+
+.li:hover {
+    background-color: rgba(255, 255, 255, 0.16);
+}
+
+.span {
+    font-size: 14px;
+    letter-spacing: 1.4px;
+}
+
+.wraps {
+    flex-wrap: wrap;
+}
+
+.items {
+    position: relative;
+}
+
+/* inventory */
+#show {
+    margin: 40px 0px;
+    width: 100%;
+}
+
+#show thead {
+    margin-bottom: 20px;
+}
+
+#show th {
+    width: 25%;
+    height: 52px;
+    font-size: 18px;
+    border-bottom: 1px solid var(--focusCol);
+    text-transform: capitalize;
+}
+
+#show td {
+    height: 36px;
+    width: 25%;
+    text-align: center;
+    border-bottom: 1px solid var(--focusCol);
+}
+
+/* receipt */
+.receipt {
+    color: #00ff55;
+    text-decoration: underline;
+    font-size: 14px;
+    cursor: pointer;
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Panel</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <style>
+        main {
+            display: flex;
+            justify-content: center;
+            padding: 200px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        .menubar {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <form>
+            <label>Enter Authentication Key</label>
+            <input id='key' class="in" type="text">
+            <input style="background-color: #507cf5; 
+            color: #fff; 
+            padding: 12px; 
+            border-radius: 4px; cursor: pointer;" type="submit">
+        </form>
+    </main>
+</body>
+
+</html>
+<script>
+    const electron = require("electron")
+    const { ipcRenderer } = electron
+    const customTitlebar = require('custom-electron-titlebar')
+    document.addEventListener('DOMContentLoaded', () => {
+        new customTitlebar.Titlebar({
+            backgroundColor: customTitlebar.Color.fromHex('#0C1427')
+        })
+    })
+
+    document.querySelector('form').addEventListener('submit', e => {
+        e.preventDefault()
+        const key = document.getElementById('key').value
+        ipcRenderer.send('key:verification', key)
+    })
+</script>

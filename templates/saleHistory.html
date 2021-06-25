@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History - Sale</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <style>
+        td, th {
+            width: 16.67% !important;
+        }
+
+    </style>
+</head>
+
+<body>
+    <main>
+        <table id="show">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Sub Total</th>
+                    <th>Discount</th>
+                    <th>Amount</th>
+                    <th>Receipt</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </main>
+</body>
+
+</html>
+<script>
+    const { ipcRenderer } = require('electron')
+    const customTitlebar = require('custom-electron-titlebar')
+
+    const show = document.querySelector('#show tbody')
+
+    document.addEventListener('DOMContentLoaded', () => {
+        new customTitlebar.Titlebar({
+            backgroundColor: customTitlebar.Color.fromHex('#0c1427')
+        })
+        ipcRenderer.send('historySale:load', '')
+    })
+
+    const openReceipt = e => {
+        ipcRenderer.send('receiptWindow:load', e.target.getAttribute('id'))
+    }
+
+    //getting sale history
+    ipcRenderer.on('historySale:show', (e, data) => {
+
+        for(let i of data) {
+            const tr = document.createElement('tr')
+            const td1 = document.createElement('td')
+            const td2 = document.createElement('td')
+            const td3 = document.createElement('td')
+            const td4 = document.createElement('td')
+            const td5 = document.createElement('td')
+            const td6 = document.createElement('td')
+
+            td1.innerText = i.date
+            td2.innerText = i.customerName
+            td3.innerText = '₹' +i.subTotal
+            td4.innerText = '₹' +i.discount
+            td5.innerText = '₹' +i.totalAmt
+            td6.innerText = 'view'
+            td6.className = 'receipt'
+            td6.addEventListener('click', openReceipt)
+            td6.setAttribute('id', i._id)
+
+            tr.appendChild(td1)
+            tr.appendChild(td2)
+            tr.appendChild(td3)
+            tr.appendChild(td4)
+            tr.appendChild(td5)
+            tr.appendChild(td6)
+            show.appendChild(tr)
+        }
+    })
+</script>

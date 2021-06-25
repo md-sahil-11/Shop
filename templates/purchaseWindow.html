@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+    <body>
+        <main>
+            <h4>- PURCHASE -</h4>
+            <form>
+                <!-- supplier data -->
+                <div id="supplier-info" class="wraps">
+                    <div class="sup-name__container">
+                        <label>Supplier Name</label><br>
+                        <input class="in" type="text" style="width: 240px;" id="sup-name" required>
+                    </div>
+                    <div class="sup-contact__container">
+                        <label>Supplier Contact</label><br>
+                        <input class="in" type="text" style="width: 300px;" id="sup-contact" required>
+                    </div>
+                    <div class="sup-address__container">
+                        <label>Date</label><br>
+                        <input class="in" type="date" id="date" required>
+                    </div>
+                </div>
+                <div class="items-content">
+                    <table id="list">
+                        <thead>
+                            <tr>
+                                <th>Sl.</th>
+                                <th>Item</th>
+                                <th>Brand</th>
+                                <th>Rate</th>
+                                <th>Quantity</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tr class='row'>
+                            <td><span class='slnos'>1</span></td>
+                            <td><input class='items in' index='0' type="text" required="required"></td>
+                            <td><input class='brands  in' type="text" required></td>
+                            <td><input class='rates in' index='0' type="text" required onkeypress="return isNumberKey(event)"></td>
+                            <td><input min="1" value='1' index='0' class='quantities in' type="number"
+                                    required='required'></td>
+                            <td><input readonly value='0' class='amts read' type="text"></td>
+                            <td>
+                                <div class="remove" index='0'>&#10006;</div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="add-container">
+                        <div style="color: red; height: 24px;" id="info-more"></div>
+                        <div id="add" onclick="add()">+ Add More</div><br>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <label>Sub Total :</label>
+                <input type="text" value='0' id="sub-total" class="read" readonly>&nbsp;
+                <label>Discount amount :</label>
+                <input type="text" value='0' class="in" id='discount-amount' required onkeypress="return isNumberKey(event)">&nbsp;
+                <label>Discount :</label>
+                <input type="text" value='0' id='discount' class="in" onkeypress="return isNumberKey(event)"> % <br>
+                <label>Net Payable :</label>
+                <input type="text" value='0' class="read" readonly id='net'>
+                <button class='submit'>Submit</button>
+            </form>
+            <ul id="myMenu" class="menu"></ul>
+            <ul id="supplierList" class="menu"></ul>
+        </main>
+    </body>
+</body>
+
+</html>
+<script src="../static/js/index1.js"></script>
